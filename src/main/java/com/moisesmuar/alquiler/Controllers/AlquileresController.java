@@ -77,12 +77,10 @@ public class AlquileresController {
         }
     }
 
-    @GetMapping("/{mes}/{ano}/{idInmueble}")
-    public List<AlquileresModel> getAlquileresMesAnoInmueble( @PathVariable(value = "mes") int mes,
-                                                      @PathVariable(value = "ano") int ano,
-                                                      @PathVariable(value = "idInmueble") int idInmueble) {
+    @GetMapping("/empresa/{nombreEmpresa}")
+    public List<AlquileresModel> getAlquileresEmpresa( @PathVariable(value = "nombreEmpresa") String nombreEmpresa) {
 
-        List<AlquileresModel> alquileres = alquileresRepository.findByMesAndAnoAndCliente(mes, ano, idInmueble);
+        List<AlquileresModel> alquileres = alquileresRepository.getAlquileresEmpresa( nombreEmpresa );
 
         if (alquileres.isEmpty()) {
             return Collections.emptyList();
@@ -91,6 +89,21 @@ public class AlquileresController {
         }
     }
 
+    @GetMapping("/{mes}/{ano}/{idInmueble}/{nombreEmpresa}")
+    public List<AlquileresModel> getAlquileresMesAnoInmueble_deEmpresa( @PathVariable(value = "mes") int mes,
+                                                  @PathVariable(value = "ano") int ano,
+                                                  @PathVariable(value = "idInmueble") int idInmueble,
+                                                  @PathVariable("nombreEmpresa") String nombreEmpresa) {
+
+        List<AlquileresModel> alquileres = alquileresRepository.getAlquileresMesAnoInmueble_deEmpresa(
+                mes, ano, idInmueble, nombreEmpresa);
+
+        if (alquileres.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return alquileres;
+        }
+    }
 
 
 }

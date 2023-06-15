@@ -13,23 +13,27 @@ import java.util.List;
 @Repository
 public interface AlquileresRepository extends JpaRepository<AlquileresModel, Integer> {
 
-    @Query("SELECT a FROM AlquileresModel a WHERE ((MONTH(a.fhinicio) = :mes AND YEAR(a.fhinicio) = :ano) OR (MONTH(a.fhfin) = :mes AND YEAR(a.fhfin) = :ano)) AND a.inmueble.idInmueble = :idInmueble")
-    List<AlquileresModel> findByMesAndAnoAndCliente(
+    /*@Query("SELECT a FROM AlquileresModel a WHERE ((MONTH(a.fhinicio) = :mes AND YEAR(a.fhinicio) = :ano) OR (MONTH(a.fhfin) = :mes AND YEAR(a.fhfin) = :ano)) AND a.inmueble.idInmueble = :idInmueble")
+    List<AlquileresModel> getAlquileresMesAnoInmueble_deEmpresa(
             @Param("mes") int mes,
             @Param("ano") int ano,
-            @Param("idInmueble") int idInmueble);
+            @Param("idInmueble") int idInmueble,
+            @Param("nombreEmpresa") String nombreEmpresa
+    );
+*/
+    @Query("SELECT a FROM AlquileresModel a INNER JOIN a.empresa e " +
+            "WHERE ((MONTH(a.fhinicio) = :mes AND YEAR(a.fhinicio) = :ano) OR " +
+            "(MONTH(a.fhfin) = :mes AND YEAR(a.fhfin) = :ano)) AND " +
+            "a.inmueble.idInmueble = :idInmueble AND e.nombre = :nombreEmpresa")
+    List<AlquileresModel> getAlquileresMesAnoInmueble_deEmpresa(
+            @Param("mes") int mes,
+            @Param("ano") int ano,
+            @Param("idInmueble") int idInmueble,
+            @Param("nombreEmpresa") String nombreEmpresa
+    );
 
-    /*
-        @Query("SELECT a FROM AlquileresModel a WHERE (MONTH(a.fhinicio) = :mes AND YEAR(a.fhinicio) = :ano) OR (MONTH(a.fhfin) = :mes AND YEAR(a.fhfin) = :ano)")
-        List<AlquileresModel> findByMesAndAno(@Param("mes") int mes, @Param("ano") int ano);
-    */
-
-    /*
-        SELECT *
-        FROM alquileres
-        WHERE (MONTH(fhinicio) = 5 AND YEAR(fhinicio) = 2023)
-        OR (MONTH(fhfin) = 5 AND YEAR(fhfin) = 2023);
-    */
+    @Query("SELECT a FROM AlquileresModel a INNER JOIN a.empresa e WHERE e.nombre = :nombreEmpresa")
+    List<AlquileresModel> getAlquileresEmpresa(@Param("nombreEmpresa") String nombreEmpresa);
 
 
 }

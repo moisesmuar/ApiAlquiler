@@ -1,10 +1,13 @@
 package com.moisesmuar.alquiler.Controllers;
 
+import com.moisesmuar.alquiler.Models.AlquileresModel;
 import com.moisesmuar.alquiler.Models.ClientesModel;
 import com.moisesmuar.alquiler.Repository.ClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +66,18 @@ public class ClientesController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/empresa/{nombreEmpresa}")
+    public List<ClientesModel> getInmueblesEmpresa(@PathVariable(value = "nombreEmpresa") String nombreEmpresa) {
+
+        List<ClientesModel> clientes = clientesRepository.getClientesEmpresa( nombreEmpresa );
+
+        if (clientes.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return clientes;
         }
     }
 
